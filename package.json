@@ -1,10 +1,10 @@
 {
-  "name": "demo-template-canvas",
+  "name": "audio-visualizer-2d",
   "version": "0.0.1",
-  "description": "it's the format of demo with html5 canvas animation.",
+  "description": "",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ykob/demo-template-canvas.git"
+    "url": "https://github.com/ykob/audio-visualizer-2d.git"
   },
   "private": true,
   "scripts": {
