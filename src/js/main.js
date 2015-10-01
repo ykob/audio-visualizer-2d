@@ -8,6 +8,9 @@ var body_width  = document.body.clientWidth * 2;
 var body_height = document.body.clientHeight * 2;
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
+var audio_ctx = new AudioContext();
+var audio_buffer = new XMLHttpRequest();
+var audio_url = 'https://api.soundcloud.com/tracks/89297698/stream?client_id=0aaf73b4de24ee4e86313e01d458083d';
 var last_time_xxx = Date.now();
 var vector_touch_start = new Vector2();
 var vector_touch_move = new Vector2();
@@ -18,9 +21,32 @@ var init = function() {
   renderloop();
   setEvent();
   resizeCanvas();
+  loadAudio();
   debounce(window, 'resize', function(event){
     resizeCanvas();
   });
+};
+
+var loadAudio = function() {
+  var request = new XMLHttpRequest();
+  
+  request.open('GET', audio_url, true);
+  request.responseType = 'arraybuffer';
+  request.onload = function() {
+    audio_ctx.decodeAudioData(request.response, function(buffer) {
+      audio_buffer = buffer;
+      playAudio();
+    });
+  };
+  request.send();
+};
+
+var playAudio = function() {
+  var source = audio_ctx.createBufferSource();
+  
+  source.buffer = audio_buffer;
+  source.connect(audio_ctx.destination);
+  source.start(0);
 };
 
 var render = function() {
