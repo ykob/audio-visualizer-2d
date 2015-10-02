@@ -24,10 +24,16 @@ var init = function() {
   renderloop();
   setEvent();
   resizeCanvas();
-  loadAudio();
+  initAudio();
   debounce(window, 'resize', function(event){
     resizeCanvas();
   });
+};
+
+var initAudio = function() {
+  audio_analyser.fftSize = 2048;
+  audio_analyser.connect(audio_ctx.destination);
+  loadAudio();
 };
 
 var loadAudio = function() {
@@ -48,7 +54,6 @@ var playAudio = function() {
   var source = audio_ctx.createBufferSource();
   
   source.buffer = audio_buffer;
-  source.connect(audio_ctx.destination);
   source.connect(audio_analyser);
   source.start(0);
 };
