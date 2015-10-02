@@ -4,13 +4,17 @@ var Force = require('./force');
 var debounce = require('./debounce');
 var Mover = require('./mover');
 
-var body_width  = document.body.clientWidth * 2;
-var body_height = document.body.clientHeight * 2;
+var body = document.body;
+var body_width  = body.clientWidth * 2;
+var body_height = body.clientHeight * 2;
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-var audio_ctx = new AudioContext();
+var audio = document.getElementById('audio');
+var audio_ctx = new (window.AudioContext || window.webkitAudioContext)();
+var audio_analyser = audio_ctx.createAnalyser();
 var audio_buffer = new XMLHttpRequest();
 var audio_url = 'https://api.soundcloud.com/tracks/89297698/stream?client_id=0aaf73b4de24ee4e86313e01d458083d';
+var log = document.getElementById('log');
 var last_time_xxx = Date.now();
 var vector_touch_start = new Vector2();
 var vector_touch_move = new Vector2();
@@ -46,10 +50,21 @@ var playAudio = function() {
   
   source.buffer = audio_buffer;
   source.connect(audio_ctx.destination);
+  source.connect(audio_analyser);
   source.start(0);
 };
 
 var render = function() {
+  var spectrums = new Uint8Array(audio_analyser.frequencyBinCount);
+  var str = '';
+  var length = 0;
+  
+  audio_analyser.getByteFrequencyData(spectrums);
+  length = audio_analyser.frequencyBinCount;
+  for (var i = 0; i < length; i++) {
+    str += '<span class="spectrums_unit">' + spectrums[i] + '</span>';
+  }
+  log.innerHTML = 'audio_analyser.frequencyBinCount.length : ' + length + '<br>' + str + '';
   ctx.clearRect(0, 0, body_width, body_height);
 };
 
@@ -65,8 +80,8 @@ var renderloop = function() {
 };
 
 var resizeCanvas = function() {
-  body_width  = document.body.clientWidth * 2;
-  body_height = document.body.clientHeight * 2;
+  body_width  = body.clientWidth * 2;
+  body_height = body.clientHeight * 2;
 
   canvas.width = body_width;
   canvas.height = body_height;
