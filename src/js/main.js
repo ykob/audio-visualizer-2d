@@ -9,7 +9,6 @@ var body_width  = body.clientWidth * 2;
 var body_height = body.clientHeight * 2;
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-var audio = document.getElementById('audio');
 var audio_ctx = new (window.AudioContext || window.webkitAudioContext)();
 var audio_analyser = audio_ctx.createAnalyser();
 var audio_buffer = new XMLHttpRequest();
