@@ -9,7 +9,17 @@ body {
   height: 100%;
   overflow: hidden;
   font-family: 'source code pro';
-  background-color: #111;
+  background-color: rgba(0, 30, 40, 1);
+}
+h1 {
+  position: absolute;
+  right: 0;
+  top: 10vh;
+  left: 0;
+  z-index: 2;
+  color: rgba(0, 210, 200, 1);
+  font-size: 4vw;
+  text-align: center;
 }
 canvas {
   position: absolute;
@@ -20,11 +30,9 @@ canvas {
 }
 p {
   line-height: 1.5;
+  position: relative;
+  z-index: 2;
   padding: 1em;
   color: #00ee00;
   word-wrap:break-word;
-}
-.spectrums_unit {
-  width: 2em;
-  display: inline-block;
 }
