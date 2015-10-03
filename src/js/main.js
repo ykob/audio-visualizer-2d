@@ -72,7 +72,7 @@ var drawSpectrums = function() {
   for (var i = 0; i < length; i++) {
     var x = i / fft_size * body_width;
     //var y = spectrums[i] / 256 * body_height;
-    var y = Math.abs(spectrums[i] - 128) / 128 * body_height * -0.9 + body_height / 1.1;
+    var y = (Math.log(256 - spectrums[i]) / Math.log(256)) * body_height * 0.9;
     
     if (i === 0) {
       ctx.moveTo(x, y);
