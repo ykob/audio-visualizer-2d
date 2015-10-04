@@ -14,7 +14,8 @@ var audio_analyser = audio_ctx.createAnalyser();
 var audio_buffer = new XMLHttpRequest();
 var audio_url = 'https://api.soundcloud.com/tracks/89297698/stream?client_id=0aaf73b4de24ee4e86313e01d458083d';
 var fft_size = 512;
-var log = document.getElementById('log');
+var movers = [];
+var gravity = new Vector2(0, 0.5);
 var last_time_xxx = Date.now();
 var vector_touch_start = new Vector2();
 var vector_touch_move = new Vector2();
@@ -22,10 +23,11 @@ var vector_touch_end = new Vector2();
 var is_touched = false;
 
 var init = function() {
-  renderloop();
+  poolMover();
+  initAudio();
   setEvent();
   resizeCanvas();
-  initAudio();
+  renderloop();
   debounce(window, 'resize', function(event){
     resizeCanvas();
   });
@@ -59,35 +61,58 @@ var playAudio = function() {
   source.start(0);
 };
 
-var drawSpectrums = function() {
+var poolMover = function() {
+  for (var i = 0; i < fft_size; i++) {
+    var mover = new Mover();
+    var x = i / fft_size * body_width;
+    var y = Math.log(128) / Math.log(256) * body_height * 0.9;
+    var position = new Vector2(x, y);
+    
+    mover.init(position, 6);
+    movers.push(mover);
+  }
+};
+
+var updateMover = function() {
   var spectrums = new Uint8Array(audio_analyser.frequencyBinCount);
   var str = '';
   var length = 0;
   
   audio_analyser.getByteTimeDomainData(spectrums);
-  length = audio_analyser.frequencyBinCount;
-  ctx.fillStyle = 'rgba(0, 210, 200, 1)';
-  ctx.lineWidth = 4;
-  ctx.beginPath();
-  for (var i = 0; i < length; i++) {
-    var x = i / fft_size * body_width;
-    //var y = spectrums[i] / 256 * body_height;
-    var y = (Math.log(256 - spectrums[i]) / Math.log(256)) * body_height * 0.9;
+  spectrum_length = audio_analyser.frequencyBinCount;
+  
+  for (var i = 0; i < movers.length; i++) {
+    var mover = movers[i];
+    var y = Math.log(256 - spectrums[i * 2]) / Math.log(256) * body_height * 0.9;
     
-    if (i === 0) {
-      ctx.moveTo(x, y);
-    } else {
-      ctx.lineTo(x, y);
-    }
+    mover.velocity.y = y;
+    mover.updateVelocity();
+    mover.updatePosition();
+    mover.draw(ctx);
   }
-  ctx.lineTo(body_width, body_height);
-  ctx.lineTo(0, body_height);
-  ctx.fill();
+  
+  
+  // ctx.fillStyle = 'rgba(0, 210, 200, 1)';
+  // ctx.lineWidth = 4;
+  // ctx.beginPath();
+  // for (var i = 0; i < spectrum_length; i++) {
+  //   var x = i / fft_size * body_width;
+  //   var y = (Math.log(256 - spectrums[i]) / Math.log(256)) * body_height * 0.9;
+    
+  //   if (i === 0) {
+  //     ctx.moveTo(x, y);
+  //   } else {
+  //     ctx.lineTo(x, y);
+  //   }
+  // }
+  // ctx.lineTo(body_width, body_height);
+  // ctx.lineTo(0, body_height);
+  // ctx.fill();
 };
 
 var render = function() {
   ctx.clearRect(0, 0, body_width, body_height);
-  drawSpectrums();
+  updateMover();
 };
 
 var renderloop = function() {
