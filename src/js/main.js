@@ -16,7 +16,6 @@ var audio_buffer = new XMLHttpRequest();
 var audio_url = 'https://api.soundcloud.com/tracks/127070185/stream?client_id=0aaf73b4de24ee4e86313e01d458083d';
 var fft_size = 512;
 var movers = [];
-var gravity = new Vector2(0, 0.5);
 var last_time_xxx = Date.now();
 var vector_touch_start = new Vector2();
 var vector_touch_move = new Vector2();
