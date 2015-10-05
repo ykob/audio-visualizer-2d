@@ -9,17 +9,7 @@ body {
   height: 100%;
   overflow: hidden;
   font-family: 'source code pro';
-  background-color: rgba(50, 20, 0, 1);
-}
-h1 {
-  position: absolute;
-  right: 0;
-  top: 10vh;
-  left: 0;
-  z-index: 2;
-  color: rgba(200, 50, 50, 1);
-  font-size: 4vw;
-  text-align: center;
+  background: radial-gradient(ellipse at center, #000000 44%, #001922 100%);
 }
 canvas {
   position: absolute;

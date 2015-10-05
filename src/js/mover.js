@@ -11,10 +11,10 @@ var exports = function(){
     this.radius = 0;
     this.mass = 1;
     this.direction = 0;
-    this.r = 220;
-    this.g = 30;
-    this.b = 30;
-    this.a = 1;
+    this.r = Util.getRandomInt(0, 32);
+    this.g = Util.getRandomInt(0, 192);
+    this.b = Util.getRandomInt(32, 255);
+    this.a = 0.1;
     this.time = 0;
     this.is_active = false;
   };

@@ -12,7 +12,8 @@ var ctx = canvas.getContext('2d');
 var audio_ctx = new (window.AudioContext || window.webkitAudioContext)();
 var audio_analyser = audio_ctx.createAnalyser();
 var audio_buffer = new XMLHttpRequest();
-var audio_url = 'https://api.soundcloud.com/tracks/89297698/stream?client_id=0aaf73b4de24ee4e86313e01d458083d';
+//var audio_url = 'https://api.soundcloud.com/tracks/89297698/stream?client_id=0aaf73b4de24ee4e86313e01d458083d';
+var audio_url = 'https://api.soundcloud.com/tracks/127070185/stream?client_id=0aaf73b4de24ee4e86313e01d458083d';
 var fft_size = 512;
 var movers = [];
 var gravity = new Vector2(0, 0.5);
@@ -64,11 +65,12 @@ var playAudio = function() {
 var poolMover = function() {
   for (var i = 0; i < fft_size; i++) {
     var mover = new Mover();
-    var x = i / fft_size * body_width;
-    var y = Math.log(128) / Math.log(256) * body_height * 0.9;
+    var rad = Util.getRadian(i / fft_size * 360);
+    var x = Math.cos(rad) + body_width / 2;
+    var y = Math.sin(rad) + body_height / 2;
     var position = new Vector2(x, y);
     
-    mover.init(position, 6);
+    mover.init(position, 20);
     movers.push(mover);
   }
 };
@@ -83,35 +85,22 @@ var updateMover = function() {
   
   for (var i = 0; i < movers.length; i++) {
     var mover = movers[i];
-    var y = Math.log(256 - spectrums[i * 2]) / Math.log(256) * body_height * 0.9;
-    
-    mover.velocity.y = y;
+    var rad = Util.getRadian(i / movers.length * 360);
+    var r = body_height / 3;
+    var x = Math.cos(rad) * r + body_width / 2;
+    var y = Math.sin(rad) * r + body_height / 2;
+    var size = Math.pow((256 - spectrums[i * 2]) / 128, 7);
+
+    mover.radius = size;
+    mover.velocity.set(x, y);
     mover.updateVelocity();
     mover.updatePosition();
     mover.draw(ctx);
   }
-  
-  
-  // ctx.fillStyle = 'rgba(0, 210, 200, 1)';
-  // ctx.lineWidth = 4;
-  // ctx.beginPath();
-  // for (var i = 0; i < spectrum_length; i++) {
-  //   var x = i / fft_size * body_width;
-  //   var y = (Math.log(256 - spectrums[i]) / Math.log(256)) * body_height * 0.9;
-    
-  //   if (i === 0) {
-  //     ctx.moveTo(x, y);
-  //   } else {
-  //     ctx.lineTo(x, y);
-  //   }
-  // }
-  // ctx.lineTo(body_width, body_height);
-  // ctx.lineTo(0, body_height);
-  // ctx.fill();
 };
 
 var render = function() {
-  ctx.globalCompositeOperation = 'lighter'；
+  ctx.globalCompositeOperation = 'lighter';
   ctx.clearRect(0, 0, body_width, body_height);
   updateMover();
 };
