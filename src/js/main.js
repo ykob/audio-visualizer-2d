@@ -111,6 +111,7 @@ var updateMover = function() {
 };
 
 var render = function() {
+  ctx.globalCompositeOperation = 'lighter'；
   ctx.clearRect(0, 0, body_width, body_height);
   updateMover();
 };
