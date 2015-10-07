@@ -58,6 +58,10 @@ var playAudio = function() {
   
   source.buffer = audio_buffer;
   source.connect(audio_analyser);
+  source.loop = true;
+  source.loopStart = 0;
+  source.loopEnd = audio_buffer.duration;
+  source.playbackRate.value = 1.0;
   source.start(0);
 };
 
