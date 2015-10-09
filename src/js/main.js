@@ -92,7 +92,7 @@ var updateMover = function() {
     var r = body_height / 3;
     var x = Math.cos(rad) * r + body_width / 2;
     var y = Math.sin(rad) * r + body_height / 2;
-    var size = Math.pow((256 - spectrums[i * 2]) / 128, 7);
+    var size = Math.pow(Math.abs(spectrums[i * 2] - 128) / 128 + 1.1, 7);
 
     mover.radius = size;
     mover.velocity.set(x, y);
