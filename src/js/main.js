@@ -68,12 +68,14 @@ var playAudio = function() {
 var poolMover = function() {
   for (var i = 0; i < fft_size; i++) {
     var mover = new Mover();
-    var rad = Util.getRadian(i / fft_size * 360);
+    var deg = i / fft_size * 360;
+    var rad = Util.getRadian(deg);
     var x = Math.cos(rad) + body_width / 2;
     var y = Math.sin(rad) + body_height / 2;
     var position = new Vector2(x, y);
     
     mover.init(position, 20);
+    mover.h = Math.abs(deg - 180) / 4;
     movers.push(mover);
   }
 };
@@ -94,6 +96,7 @@ var updateMover = function() {
     var y = Math.sin(rad) * r + body_height / 2;
     var size = Math.pow(Math.abs(spectrums[i * 2] - 128) / 128 + 1.1, 7);
 
+    mover.h += 0.1
     mover.radius = size;
     mover.velocity.set(x, y);
     mover.updateVelocity();

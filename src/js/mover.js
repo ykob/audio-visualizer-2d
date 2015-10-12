@@ -11,10 +11,10 @@ var exports = function(){
     this.radius = 0;
     this.mass = 1;
     this.direction = 0;
-    this.r = 32;
-    this.g = 128;
-    this.b = 128;
-    this.a = 0.1;
+    this.h = 0;
+    this.s = 80;
+    this.l = 15;
+    this.a = 0.5;
     this.time = 0;
     this.is_active = false;
   };
@@ -59,7 +59,7 @@ var exports = function(){
       this.direction = Math.atan2(v.y, v.x);
     },
     draw: function(context) {
-      context.fillStyle = 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + this.a + ')';
+      context.fillStyle = 'hsla(' + this.h + ',' + this.s + '%,' + this.l + '%,' + this.a + ')';
       context.beginPath();
       context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI / 180, true);
       context.fill();
